@@ -1,0 +1,46 @@
+@startuml
+package "Administrator Aggregate" {
+    class Administrator <<Entity Root>> {
+        -id: AdministratorId
+        -email: EmailAddress
+        -address: StreetAddress
+    }
+    class AdministratorId <<ValueObject>> {
+        -value: number
+    }
+
+    class EmailAddress <<ValueObject>> {
+        -address: string
+        +isValid(): boolean
+        +validate(): void
+    }
+    class StreetAddress <<ValueObject>> {
+        -street: string
+        -number: string
+        -city: string
+        -postalCode: string
+        -country: string
+        +getStreetAddress(): string
+    }
+    class Person <<Entity>> extends Administrator {
+            -name: PersonName
+            -dni: Dni
+    }
+    class Dni <<ValueObject>> {
+            -value: string
+            +isValid(): boolean
+            +validate(): void
+    }
+    class PersonName <<ValueObject>> {
+            -firstName: string
+            -lastName: string
+            +getFullName(): string
+    }
+
+}
+Administrator -> AdministratorId
+Administrator -up-> EmailAddress
+Administrator -up-> StreetAddress
+Person --> PersonName
+Person -down-> Dni
+@enduml

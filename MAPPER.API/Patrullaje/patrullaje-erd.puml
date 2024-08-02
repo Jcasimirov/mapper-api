@@ -1,0 +1,77 @@
+@startuml
+skinparam linetype ortho
+left to right direction
+
+entity administrator {
+    *id: BIGINT AI <<PK>>
+    --
+    first_name: VARCHAR(255)
+    last_name: VARCHAR(255)
+    document_number: VARCHAR(15)
+    email_address: VARCHAR(255)
+    address_street: VARCHAR(255)
+    address_number: VARCHAR(255)
+    address_city: VARCHAR(255)
+    address_postal_code: VARCHAR(255)
+    address_country: VARCHAR(255)
+    *created_at: DATETIME
+    *created_by: BIGINT <<FK>>
+    updated_at: DATETIME
+    updated_by: BIGINT <<FK>>
+}
+
+entity users {
+    *id: BIGINT <<PK>>
+    --
+    *email_address: VARCHAR(255)
+    first_name: VARCHAR(75)
+    last_name: VARCHAR(75)    
+    address_street: VARCHAR(255)
+    address_number: VARCHAR(255)
+    address_city: VARCHAR(255)
+    address_country: VARCHAR(255)
+    address_postal_code: VARCHAR(255)
+    *created_at: DATETIME
+    *created_by: BIGINT <<FK>>
+    updated_at: DATETIME
+    updated_by: BIGINT <<FK>>
+}
+
+entity security_agent {
+    *id: BIGINT <<PK>>
+    --
+    first_name: VARCHAR(75)
+    last_name: VARCHAR(75)
+    *document_number: VARCHAR(15)
+    email_address: VARCHAR(255)
+    *cellphone: VARCHAR(9)
+    address_work: VARCHAR(255)
+    *state_security: VARCHAR(1)
+    *turn_security: VARCHAR(1)
+    *rol: VARCHAR(50)
+    *location: VARCHAR(255)
+    *created_at: DATETIME
+    *created_by: BIGINT <<FK>>
+    updated_at: DATETIME
+    updated_by: BIGINT <<FK>>
+}
+
+entity notifications {
+    *id: BIGINT <<PK>>
+    --
+    *incident_id: CHAR(1)
+    *users_id: BIGINT <<FK>>
+    *security_agent_id: BIGINT
+    *message: CHAR(255)    
+    *state_notifications: CHAR(36)
+    *created_at: DATETIME
+    *created_by: BIGINT <<FK>>
+    updated_at: DATETIME
+    *updated_by: BIGINT <<FK>>
+}
+
+users ||--o{ administrator
+users ||--o{ notifications
+notifications ||--o{ security_agent
+administrator ||--o{ security_agent
+@enduml

@@ -1,0 +1,81 @@
+@startuml
+package "Router Register Aggregate" {
+    class router <<Entity Root>> {
+        -id: RouterId
+        -user: User
+        -security: SecurityAgent
+        -address: StreetAddress
+        -auditTrail: AuditTrail
+    }
+    
+    class RouterId <<ValueObject>> {
+        -value: number
+    }
+    
+    class User <<ValueObject>> {
+        -id: UserId
+    }
+    class SecurityAgent <<ValueObject>> {
+        -id: UserId
+        -document: Document
+        +updateNotification(): void
+    }
+    
+    class UserId <<ValueObject>> {
+        -value: number
+    }
+
+    class StreetAddress <<ValueObject>> {
+        -street: string
+        -number: string
+        -city: string
+        -country: string
+        -localization: Localization        
+        +getStreetAddress(): string
+        +getLocalization(): string
+    }
+    class Localization <<ValueObject>> {
+        -latitude: string
+        -altitude: string
+        +register(): void
+    }
+    class AuditTrail <<ValueObject>> {
+        -createdAt: DateTime
+        -createdBy: UserId
+        -updateAt: DateTime
+        -updateBy: UserId
+    }
+    class DateTime {
+        -value: string
+    }
+    class Document <<ValueObject>> {
+        -type: string
+        -number: string
+    }
+    class Person <<Entity>> extends User {
+        -name: PersonName
+        -dni: Dni
+    }
+    class Dni <<ValueObject>> {
+        -value: string
+        +isValid(): boolean
+        +validate(): void
+    }
+    class PersonName <<ValueObject>> {
+        -firstName: string
+        -lastName: string
+        +getFullName(): string
+    }
+}
+router -> RouterId
+router -down-> User
+router -left-> AuditTrail
+router -down-> StreetAddress
+router --> SecurityAgent
+AuditTrail -down-> DateTime
+AuditTrail -left-> UserId
+StreetAddress -down-> Localization
+SecurityAgent -down-> Document
+Person -left-> PersonName
+Person -right-> Dni
+@enduml

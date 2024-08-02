@@ -1,0 +1,54 @@
+@startuml
+package "Security Register Aggregate" {
+    class Security <<Entity Root>> {
+        -id: SecurityId
+        -workInformation: WorkInformation
+        -auditTrail: AuditTrail
+    }
+    class SecurityId <<ValueObject>> {
+        -value: number
+    }
+    
+    class Person <<Entity>> extends Security {
+            -name: PersonName
+            -dni: Dni
+    }
+    class Dni <<ValueObject>> {
+            -value: string
+            +isValid(): boolean
+            +validate(): void
+    }
+    class PersonName <<ValueObject>> {
+            -firstName: string
+            -lastName: string
+            +getFullName(): string
+    }
+    class AuditTrail <<ValueObject>> {
+        -createdAt: DateTime
+        -createdBy: UserId
+        -updateAt: DateTime
+        -updateBy: UserId
+    }
+    class WorkInformation <<ValueObject>> {
+        -document: DNI
+        -email: string
+        -cellphone: string
+        -address: string
+        -state: string
+        -turn: string
+        -rol: string
+        -location: string
+    }
+    class DateTime {
+        -value: string
+    }
+}
+Security -> SecurityId
+Security -up-> AuditTrail
+Security -up-> WorkInformation
+Person -left-> PersonName
+Person -right-> Dni
+WorkInformation -right-> Dni
+AuditTrail -right-> DateTime
+AuditTrail -right-> SecurityId
+@enduml

@@ -1,0 +1,60 @@
+@startuml
+package "User Register Aggregate" {
+    class User <<Entity Root>> {
+        -id: UserId
+        -email: EmailAddress
+        -address: StreetAddress
+        -auditTrail: AuditTrail
+    }
+    class UserId <<ValueObject>> {
+        -value: number
+    }
+
+    class EmailAddress <<ValueObject>> {
+        -address: string
+        +isValid(): boolean
+        +validate(): void
+        +register(): void
+    }
+    class StreetAddress <<ValueObject>> {
+        -street: string
+        -number: string
+        -city: string
+        -postalCode: string
+        -country: string
+        +getStreetAddress(): string
+    }
+    class Person <<Entity>> extends User {
+            -name: PersonName
+            -dni: Dni
+    }
+    class Dni <<ValueObject>> {
+            -value: string
+            +isValid(): boolean
+            +validate(): void
+    }
+    class PersonName <<ValueObject>> {
+            -firstName: string
+            -lastName: string
+            +getFullName(): string
+    }
+    class AuditTrail <<ValueObject>> {
+        -createdAt: DateTime
+        -createdBy: UserId
+        -updateAt: DateTime
+        -updateBy: UserId
+    }
+    class DateTime {
+        -value: string
+    }
+
+}
+User -> UserId
+User -up-> AuditTrail
+User -left-> EmailAddress
+User -up-> StreetAddress
+Person -left-> PersonName
+Person -right-> Dni
+AuditTrail -right-> DateTime
+AuditTrail -right-> UserId
+@enduml

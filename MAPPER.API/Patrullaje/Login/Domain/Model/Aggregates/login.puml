@@ -1,0 +1,33 @@
+@startuml
+package "Login Aggregate" {
+    class Login <<Entity Root>> {
+        -email: EmailAddress
+        -auditTrail: AuditTrail
+    }
+    class UserId <<ValueObject>> {
+        -value: number
+    }
+
+    class EmailAddress <<ValueObject>> {
+        -address: string
+        +validate(): void
+    }
+
+
+    class AuditTrail <<ValueObject>> {
+        -createdAt: DateTime
+        -createdBy: UserId
+        -updateAt: DateTime
+        -updateBy: UserId
+    }
+    class DateTime {
+        -value: string
+    }
+
+}
+
+Login -down-> AuditTrail
+Login -down-> EmailAddress
+AuditTrail -left-> DateTime
+AuditTrail -> UserId
+@enduml

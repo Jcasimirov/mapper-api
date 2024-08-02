@@ -1,0 +1,46 @@
+@startuml
+package "Security_Agent Aggregate" {
+    class Security <<Entity Root>> {
+        -id: SecurityId
+        -email: EmailAddress
+        -address: WorkAddress
+    }
+    class SecurityId <<ValueObject>> {
+        -value: number
+    }
+
+    class EmailAddress <<ValueObject>> {
+        -address: string
+        +isValid(): boolean
+        +validate(): void
+    }
+    class WorkAddress <<ValueObject>> {
+        -street: string
+        -number: string
+        -city: string
+        -postalCode: string
+        -country: string
+        +getStreetAddress(): string
+    }
+    class Person <<Entity>> extends Security {
+            -name: PersonName
+            -dni: Dni
+    }
+    class Dni <<ValueObject>> {
+            -value: string
+            +isValid(): boolean
+            +validate(): void
+    }
+    class PersonName <<ValueObject>> {
+            -firstName: string
+            -lastName: string
+            +getFullName(): string
+    }
+
+}
+Security -> SecurityId
+Security -up-> EmailAddress
+Security -up-> WorkAddress
+Person --> PersonName
+Person -down-> Dni
+@enduml

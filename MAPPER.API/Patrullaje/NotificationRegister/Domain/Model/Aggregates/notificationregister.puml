@@ -1,0 +1,73 @@
+@startuml
+package "Notification Register Aggregate" {
+    class notification <<Entity Root>> {
+        -id: NotificationId
+        -user: User
+        -address: StreetAddress
+        -auditTrail: AuditTrail
+        -evidence: Evidence 
+        -state: State
+    }
+    class NotificationId <<ValueObject>> {
+        -value: number
+    }
+    
+    class User <<ValueObject>> {
+        -id: UserId
+        -email: EmailAddress
+    }
+    
+    class UserId <<ValueObject>> {
+        -value: number
+    }
+
+    class EmailAddress <<ValueObject>> {
+        -email: string
+        +isValid(): boolean
+        +register(): void
+    }
+    class StreetAddress <<ValueObject>> {
+        -street: string
+        -number: string
+        -city: string
+        -country: string
+        -localization: Localization        
+        +getStreetAddress(): string
+        +getLocalization(): string
+    }
+    class Localization <<ValueObject>> {
+        -latitude: string
+        -altitude: string
+        +register(): void
+    }
+    class AuditTrail <<ValueObject>> {
+        -createdAt: DateTime
+        -createdBy: UserId
+        -updateAt: DateTime
+        -updateBy: UserId
+    }
+    class DateTime {
+        -value: string
+    }
+    class Evidence <<ValueObject>> {
+        -image: byte
+        -video: byte
+        +register(): void
+    }
+    class State <<ValueObject>> {
+        -value: string
+        +register(): void
+    }
+
+}
+notification -> NotificationId
+notification -down-> User
+notification -down-> AuditTrail
+notification -down-> StreetAddress
+notification -left-> Evidence
+notification --> State
+AuditTrail -down-> DateTime
+AuditTrail -right-> UserId
+User -left-> EmailAddress
+StreetAddress -down-> Localization
+@enduml

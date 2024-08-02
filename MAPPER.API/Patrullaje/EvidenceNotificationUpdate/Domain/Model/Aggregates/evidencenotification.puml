@@ -1,0 +1,60 @@
+@startuml
+package "Evidence Notificacion Update Aggregate" {
+    class notification <<Entity Root>> {
+            -id: NotificationId
+            -user: User
+            -address: StreetAddress
+            -auditTrail: AuditTrail
+            -evidence: Evidence
+            -state: State
+            -security: SecurityAgent
+        }
+        class NotificationId <<ValueObject>> {
+            -value: number
+        }
+        
+        class User <<ValueObject>> {
+            -id: UserId
+            -email: EmailAddress
+        }
+        class SecurityAgent <<ValueObject>> {
+            -id: UserId
+            -document: Document
+            +updateEvidence(): void
+            +notificationUser(): void
+        }
+        
+        class UserId <<ValueObject>> {
+            -value: number
+        }
+    
+        class AuditTrail <<ValueObject>> {
+            -createdAt: DateTime
+            -createdBy: UserId
+            -updateAt: DateTime
+            -updateBy: UserId
+        }
+        class DateTime {
+            -value: string
+        }
+        class Evidence <<ValueObject>> {
+            -image: byte
+            -video: byte
+            +register(): void
+            +update(): void
+        }
+        class State <<ValueObject>> {
+            -value: string
+            +update(): void
+        }
+    
+    }
+    notification -> NotificationId
+    notification -down-> User
+    notification -down-> AuditTrail
+    notification -left-> State
+    notification --> SecurityAgent
+    SecurityAgent --> Evidence
+    AuditTrail -down-> DateTime
+    AuditTrail -right-> UserId
+    @enduml
